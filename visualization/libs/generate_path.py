@@ -1,3 +1,4 @@
+from inspect import _void
 from webbrowser import get
 import numpy as np
 import matplotlib.pyplot as plt
@@ -252,37 +253,35 @@ def display_path(input_map, path, p_start, p_stop):
 #   - tree: a graph with all the nodes and conections which reaches the final position
 
 
-def display_path(point):
-    relative_path = "..\data\IST_grey_2.PNG"        # Path to data relative to script
-    dirname = os.path.dirname(__file__)
-    image_path = os.path.join(dirname, relative_path)
+# def display_path(point):
+#     relative_path = "..\data\IST_grey_2.PNG"        # Path to data relative to script
+#     dirname = os.path.dirname(__file__)
+#     image_path = os.path.join(dirname, relative_path)
 
-    # Define original image
-    orig_image = cv.imread(image_path)
+#     # Define original image
+#     orig_image = cv.imread(image_path)
 
-    # Initialize a subplot to plot everything together
-    fig1, ax1 = plt.subplots()
-    # plot the desired map
-    ax1.imshow(orig_image)
-    # plot the start/endpoint
-    ax1.scatter(x=point[0],y=point[1],s=80)
-    # ax1.scatter(x=p_stop[0], y=p_stop[1], s=80)
-    # plot the path
-    # ax1.scatter(*zip(*path), c='r', s=1)
+#     # Initialize a subplot to plot everything together
+#     fig1, ax1 = plt.subplots()
+#     # plot the desired map
+#     ax1.imshow(orig_image)
+#     # plot the start/endpoint
+#     ax1.scatter(x=point[0],y=point[1],s=30)
+#     # ax1.scatter(x=p_stop[0], y=p_stop[1], s=80)
+#     # plot the path
+#     # ax1.scatter(*zip(*path), c='r', s=1)
 
-    plt.show()
+#     plt.show()
     
 
 
 def get_random_postion(max_x, max_y):
-    print("max x: ", max_x)
-    print("max y: ", max_y)
     return (int(random.uniform(0, max_x)), int(random.uniform(0, max_y)))
 
 
-def get_random_position_intelligent(p_stop):
-    sample_x = np.random.normal(p_stop[0], 60, 1)
-    sample_y = np.random.normal(p_stop[1], 60, 1)
+def get_random_position_intelligent(p_stop, d=50):
+    sample_x = np.random.normal(p_stop[0], d, 1)
+    sample_y = np.random.normal(p_stop[1], d, 1)
     
     return (int(sample_x[0]), int(sample_y[0]))
   
@@ -294,7 +293,7 @@ def near_neighbour(tree, rand_pos):
         if h <= pos[1] or pos[1] == -1 and pos[1] != 0:
             pos[0] = i
             pos[1] = h
-    return pos[0]
+    return pos[0],pos[1]
 
 
 def select_input(rand_pos, near_pos, step=2):
@@ -327,7 +326,7 @@ def select_input(rand_pos, near_pos, step=2):
         
     if  ang < -112.5 and ang > -157.5: #'SW':
         next_node = (near_pos[0]+step, near_pos[1]+step)
-        
+    
     return next_node
 
 
@@ -351,14 +350,14 @@ def init_tree(graph):
 
 def extend_tree(img, gradient_map, tree, rand_pos, step=5):
 
-
-    near_pos = near_neighbour(tree, rand_pos) #get near pos
+    near_pos, d = near_neighbour(tree, rand_pos) #get near pos
     next_node = select_input(rand_pos, near_pos, step)
-    
-
-    if gradient_map[next_node[1]][next_node[0]] != 0:
-        tree[near_pos].append(next_node)
-        tree[next_node] = []
+    # gm_shape = gradient_map.shape()
+    print(gradient_map.shape[1])
+    if next_node[1] < gradient_map.shape[0] and next_node[0] < gradient_map.shape[1] and \
+        next_node not in tree.keys() and gradient_map[next_node[1]][next_node[0]] != 0:
+        # tree[near_pos].append(next_node)
+        tree[next_node] = [near_pos,d]
 
         cv.line(img, near_pos, next_node, (0,0,0), thickness=1, lineType=8)
         img[next_node[1], next_node[0]]=[0, 255, 0]
@@ -371,7 +370,31 @@ def extend_tree(img, gradient_map, tree, rand_pos, step=5):
     # return tree_graph
 
 
-def rtt(img, graph, grid, gradient_map, p_start, p_stop):
+
+def get_path_tree(img, tree, p_start,p_stop):
+
+    # pos = list(tree.keys())[-1]
+    path = []
+    pos, d = near_neighbour(tree, p_stop)
+    fin, d = near_neighbour(tree, p_start)
+    print("pos: ", pos)
+    print(tree)
+
+    # exit(0)
+    path.append(p_stop)
+    while len(tree[pos]) != 0:
+        path.append(tree[pos][0])
+        pos = tree[pos][0]
+        print("init pos: ", p_start)
+        # print("pos: ",pos, "parent: ", tree[pos][0])
+    # path.append(pos)
+    path.append(p_start)
+    
+
+    return path
+
+
+def rrt(img, graph, grid, gradient_map, p_start, p_stop):
 
     # grid -> all positions
     # graph -> postions + pixels orientations
@@ -393,36 +416,191 @@ def rtt(img, graph, grid, gradient_map, p_start, p_stop):
     # --- tree inicialization
     tree = {}
     tree[p_start] =  []
-    print(tree)
+    # print(tree)
 
     
     K = 0 # number of iterations of the random tree
+    ts1 = time.time()    
+    goal = False
 
-    while True:
-        if K < 2000:
+
+    limit = 3000
+    limit_max_step = 700
+    step1 = 9
+    step2 = 4
+    step3 = 3
+    final_step = 2
+    error_goal = 5
+
+    t = time.localtime()
+    current_time = time.strftime("%H:%M:%S", t)
+    print(current_time)
+
+    while goal == False:
+        if K < limit:
             rand_pos = get_random_postion(max_img_x, max_img_y)
-            tree = extend_tree(img, gradient_map,tree, rand_pos, step=9)
-        elif K>=2000:
+            if K<limit_max_step: 
+                tree= extend_tree(img, gradient_map,tree, rand_pos, step=step1)
+            if K%2 == 0: 
+                tree= extend_tree(img, gradient_map,tree, rand_pos, step=step2)
+            else:
+                tree= extend_tree(img, gradient_map,tree, rand_pos, step=step3)
+        elif K>=limit:
             rand_pos = get_random_position_intelligent(p_stop)
-            tree = extend_tree(img, gradient_map,tree, rand_pos, step=2)
-        print("rand pos: ",rand_pos)
-        cv.circle(img, rand_pos, 1,(255,0,0),thickness=1, lineType=1)
+            tree = extend_tree(img, gradient_map,tree, rand_pos, step=final_step)
+        
+        # print("distance to goal: ", distance_to_goal)
+        k = list(tree.keys())[-1]
+        distance_to_goal = math.sqrt((k[0] - p_stop[0])**2 + (k[1] - p_stop[1])**2)
+        # print(distance_to_goal)
+
+        ts2 = time.time()
+        tf = ts2 - ts1
+
+        if distance_to_goal <= error_goal:
+            break
+
+        # elif tf > 20:
+        #     print("EXECUTION EXCEDED ADMISIBLE TIME")
+        #     print("==================================================================================")
+        #     exit(0)
+            
+       
+
+        # cv.circle(img, rand_pos, 1,(255,0,0),thickness=1, lineType=1)
         # exit(rand_pos)
 
-      
         cv.imshow("image",img)
         cv.waitKey(1)
         K += 1
         # time.sleep(0.01)
-        
-        
         # cv.circle(img, u, 1,(0,255,0),thickness=1, lineType=8)
 
-      
-  
+
+    print("---------------------------")
+    print("GOAL REACHED!!")
+    print("limit = {} \n \
+    limit_max_step = {} \n \
+    step1 = {} \n \
+    step2 = {} \n \
+    step3 =  {} \n \
+    final_step = {} \n \
+    error_goal = ".format(limit,limit_max_step, step1, step2, step3, final_step, error_goal))
+    print("---> time to compute the path: {}".format(tf))
+    print("==================================================================================")
     
+
+    exit(0)
+
+
+    path = get_path_tree()
       
-    return tree
+    return path
+
+
+
+def rrt_gaussian(img, graph, grid, gradient_map, p_start, p_stop):
+
+    # grid -> all positions
+    # graph -> postions + pixels orientations
+
+    # start and end points
+    p_start =  (p_start[0], p_start[1])
+    p_stop  =  (p_stop[0], p_stop[1])
+    # size of the gradient 
+    max_img_x = gradient_map.shape[1]
+    max_img_y = gradient_map.shape[0]
+ 
+
+
+    # visualize init and goal positions
+    cv.circle(img, p_start, 5,(0,255,0),thickness=3, lineType=8)
+    cv.circle(img, p_stop, 5,(0,0,255),thickness=3, lineType=8)
+    
+
+    # --- tree inicialization
+    tree = {}
+    tree[p_start] =  []
+    # print(tree)
+
+    
+    K = 0 # number of iterations of the random tree
+    ts1 = time.time()    
+    goal = False
+
+
+    limit = 3000
+    limit_max_step = 700
+    step1 = 9
+    step2 = 4
+    step3 = 3
+    final_step = 2
+    error_goal = 3
+
+    t = time.localtime()
+    current_time = time.strftime("%H:%M:%S", t)
+    print(current_time)
+
+    while goal == False:
+        # if K < limit:
+        if K<1000: 
+            rand_pos = get_random_postion(max_img_x, max_img_y)
+            tree= extend_tree(img, gradient_map,tree, rand_pos, step=step1)
+        if K>=1000 and K<2000: 
+            rand_pos = get_random_position_intelligent(p_stop, d=250)
+            tree= extend_tree(img, gradient_map,tree, rand_pos, step=step2)
+        if K>=2000 and K<3000: 
+            rand_pos = get_random_position_intelligent(p_stop, d=100)
+            tree= extend_tree(img, gradient_map,tree, rand_pos, step=step3)
+        if K>3000: 
+            rand_pos = get_random_position_intelligent(p_stop, d=50)
+            tree= extend_tree(img, gradient_map,tree, rand_pos, step=step3)
+            
+        # print("distance to goal: ", distance_to_goal)
+        k = list(tree.keys())[-1]
+        distance_to_goal = math.sqrt((k[0] - p_stop[0])**2 + (k[1] - p_stop[1])**2)
+        # print(distance_to_goal)
+
+        ts2 = time.time()
+        tf = ts2 - ts1
+
+        if distance_to_goal <= error_goal:
+            break
+
+        # elif tf > 20:
+        #     print("EXECUTION EXCEDED ADMISIBLE TIME")
+        #     print("==================================================================================")
+        #     exit(0)
+            
+       
+
+        cv.circle(img, rand_pos, 1,(255,0,0),thickness=1, lineType=1)
+        # exit(rand_pos)
+
+        cv.imshow("image",img)
+        cv.waitKey(1)
+        K += 1
+        # time.sleep(0.01)
+        # cv.circle(img, u, 1,(0,255,0),thickness=1, lineType=8)
+
+
+    print("---------------------------")
+    print("GOAL REACHED!!")
+    print("limit = {} \n \
+    limit_max_step = {} \n \
+    step1 = {} \n \
+    step2 = {} \n \
+    step3 =  {} \n \
+    final_step = {} \n \
+    error_goal = ".format(limit,limit_max_step, step1, step2, step3, final_step, error_goal))
+    print("---> time to compute the path: {}".format(tf))
+    print("==================================================================================")
+
+    print(tree)
+    path = get_path_tree(img, tree, p_start, p_stop)
+    print(path)
+    # exit(0)
+    return path
 
 
 

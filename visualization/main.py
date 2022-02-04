@@ -165,19 +165,19 @@ def get_path():
         print("start:", p_start, " stop:",  p_stop)
         # Try to calculate path
         print("CALCULATING PATH...")
-        path = rtt(orig_image, graph, grid,gradient_map, p_start, p_stop)
-        exit(0)
+        path = rrt_gaussian(orig_image, graph, grid,gradient_map, p_start, p_stop)
+        # exit(0)
 
-    # #reverse the path points to go from initial to final point
-    # path.reverse()
+    #reverse the path points to go from initial to final point
+    path.reverse()
 
-    # # Simplify the path 
-    # print("SIMPLIFYING PATH")
-    # path = simplify_path(path, filter_points=15)
+    # Simplify the path 
+    print("SIMPLIFYING PATH")
+    path = simplify_path(path, filter_points=3)
    
-    # # --- uncomment to visualize the path ---
-    # display_path(orig_image, path, p_start, p_stop)
-    # get_csv(path) #save the path points in a csv file
+    # --- uncomment to visualize the path ---
+    display_path(orig_image, path, p_start, p_stop)
+    get_csv(path) #save the path points in a csv file
 
 
 

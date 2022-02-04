@@ -1,0 +1,617 @@
+LOADING DATA:
+PREPROCESSING OF DATA IN PROGRESS...
+original image size main:  (655, 964, 3)
+PREPROCESSING COMPLETE!
+================================
+
+SELECT START/END-POINTS
+start: [427, 89]  stop: [609, 565]
+CALCULATING PATH...
+---------------------------
+GOAL REACHED!!
+limit = 4500 
+     limit_max_step = 500 
+     step1 = 8 
+     step2 = 5 
+     step3 =  3 
+     final_step = 2 
+     error_goal = 
+---> time to compute the path: 2.2537288665771484
+==================================================================================
+LOADING DATA:
+PREPROCESSING OF DATA IN PROGRESS...
+original image size main:  (655, 964, 3)
+PREPROCESSING COMPLETE!
+================================
+
+SELECT START/END-POINTS
+start: [739, 63]  stop: [839, 388]
+CALCULATING PATH...
+---------------------------
+GOAL REACHED!!
+limit = 4500 
+     limit_max_step = 500 
+     step1 = 8 
+     step2 = 5 
+     step3 =  3 
+     final_step = 2 
+     error_goal = 
+---> time to compute the path: 1.5350077152252197
+==================================================================================
+LOADING DATA:
+PREPROCESSING OF DATA IN PROGRESS...
+original image size main:  (655, 964, 3)
+PREPROCESSING COMPLETE!
+================================
+
+SELECT START/END-POINTS
+start: [640, 124]  stop: [211, 520]
+CALCULATING PATH...
+---------------------------
+GOAL REACHED!!
+limit = 4500 
+     limit_max_step = 500 
+     step1 = 8 
+     step2 = 5 
+     step3 =  3 
+     final_step = 2 
+     error_goal = 
+---> time to compute the path: 2.257563591003418
+==================================================================================
+LOADING DATA:
+PREPROCESSING OF DATA IN PROGRESS...
+original image size main:  (655, 964, 3)
+PREPROCESSING COMPLETE!
+================================
+
+SELECT START/END-POINTS
+start: [720, 172]  stop: [432, 440]
+CALCULATING PATH...
+---------------------------
+GOAL REACHED!!
+limit = 4500 
+     limit_max_step = 500 
+     step1 = 8 
+     step2 = 5 
+     step3 =  3 
+     final_step = 2 
+     error_goal = 
+---> time to compute the path: 2.5340633392333984
+==================================================================================
+LOADING DATA:
+PREPROCESSING OF DATA IN PROGRESS...
+original image size main:  (655, 964, 3)
+PREPROCESSING COMPLETE!
+================================
+
+SELECT START/END-POINTS
+start: [201, 283]  stop: [778, 330]
+CALCULATING PATH...
+LOADING DATA:
+PREPROCESSING OF DATA IN PROGRESS...
+original image size main:  (655, 964, 3)
+PREPROCESSING COMPLETE!
+================================
+
+SELECT START/END-POINTS
+start: [765, 124]  stop: [450, 582]
+CALCULATING PATH...
+---------------------------
+GOAL REACHED!!
+limit = 4500 
+     limit_max_step = 500 
+     step1 = 8 
+     step2 = 5 
+     step3 =  3 
+     final_step = 2 
+     error_goal = 
+---> time to compute the path: 0.5918402671813965
+==================================================================================
+LOADING DATA:
+PREPROCESSING OF DATA IN PROGRESS...
+original image size main:  (655, 964, 3)
+PREPROCESSING COMPLETE!
+================================
+
+SELECT START/END-POINTS
+start: [434, 71]  stop: [759, 499]
+CALCULATING PATH...
+---------------------------
+GOAL REACHED!!
+limit = 4500 
+     limit_max_step = 500 
+     step1 = 8 
+     step2 = 5 
+     step3 =  3 
+     final_step = 2 
+     error_goal = 
+---> time to compute the path: 0.08831620216369629
+==================================================================================
+LOADING DATA:
+PREPROCESSING OF DATA IN PROGRESS...
+original image size main:  (655, 964, 3)
+PREPROCESSING COMPLETE!
+================================
+
+SELECT START/END-POINTS
+LOADING DATA:
+PREPROCESSING OF DATA IN PROGRESS...
+original image size main:  (655, 964, 3)
+PREPROCESSING COMPLETE!
+================================
+
+SELECT START/END-POINTS
+start: [773, 330]  stop: [219, 363]
+CALCULATING PATH...
+---------------------------
+GOAL REACHED!!
+limit = 4500 
+     limit_max_step = 500 
+     step1 = 8 
+     step2 = 5 
+     step3 =  3 
+     final_step = 2 
+     error_goal = 
+---> time to compute the path: 2.3146891593933105
+==================================================================================
+LOADING DATA:
+PREPROCESSING OF DATA IN PROGRESS...
+original image size main:  (655, 964, 3)
+PREPROCESSING COMPLETE!
+================================
+
+SELECT START/END-POINTS
+start: [662, 135]  stop: [195, 269]
+CALCULATING PATH...
+---------------------------
+GOAL REACHED!!
+limit = 4500 
+     limit_max_step = 500 
+     step1 = 8 
+     step2 = 5 
+     step3 =  3 
+     final_step = 2 
+     error_goal = 
+---> time to compute the path: 2.1803455352783203
+==================================================================================
+LOADING DATA:
+PREPROCESSING OF DATA IN PROGRESS...
+original image size main:  (655, 964, 3)
+PREPROCESSING COMPLETE!
+================================
+
+SELECT START/END-POINTS
+start: [533, 94]  stop: [221, 510]
+CALCULATING PATH...
+EXECUTION EXCEDED ADMISIBLE TIME
+==================================================================================
+LOADING DATA:
+PREPROCESSING OF DATA IN PROGRESS...
+original image size main:  (655, 964, 3)
+PREPROCESSING COMPLETE!
+================================
+
+SELECT START/END-POINTS
+start: [757, 149]  stop: [219, 454]
+CALCULATING PATH...
+EXECUTION EXCEDED ADMISIBLE TIME
+==================================================================================
+LOADING DATA:
+PREPROCESSING OF DATA IN PROGRESS...
+original image size main:  (655, 964, 3)
+PREPROCESSING COMPLETE!
+================================
+
+SELECT START/END-POINTS
+start: [741, 56]  stop: [767, 448]
+CALCULATING PATH...
+21:44:44
+EXECUTION EXCEDED ADMISIBLE TIME
+==================================================================================
+LOADING DATA:
+PREPROCESSING OF DATA IN PROGRESS...
+original image size main:  (655, 964, 3)
+PREPROCESSING COMPLETE!
+================================
+
+SELECT START/END-POINTS
+start: [757, 192]  stop: [427, 69]
+CALCULATING PATH...
+21:46:13
+---------------------------
+GOAL REACHED!!
+limit = 4500 
+     limit_max_step = 500 
+     step1 = 8 
+     step2 = 5 
+     step3 =  3 
+     final_step = 2 
+     error_goal = 
+---> time to compute the path: 4.711273908615112
+==================================================================================
+LOADING DATA:
+PREPROCESSING OF DATA IN PROGRESS...
+original image size main:  (655, 964, 3)
+PREPROCESSING COMPLETE!
+================================
+
+SELECT START/END-POINTS
+start: [170, 192]  stop: [703, 157]
+CALCULATING PATH...
+21:46:52
+---------------------------
+GOAL REACHED!!
+limit = 4500 
+     limit_max_step = 500 
+     step1 = 8 
+     step2 = 5 
+     step3 =  3 
+     final_step = 2 
+     error_goal = 
+---> time to compute the path: 2.966770648956299
+==================================================================================
+LOADING DATA:
+PREPROCESSING OF DATA IN PROGRESS...
+original image size main:  (655, 964, 3)
+PREPROCESSING COMPLETE!
+================================
+
+SELECT START/END-POINTS
+start: [765, 477]  stop: [712, 178]
+CALCULATING PATH...
+21:47:02
+EXECUTION EXCEDED ADMISIBLE TIME
+==================================================================================
+LOADING DATA:
+PREPROCESSING OF DATA IN PROGRESS...
+original image size main:  (655, 964, 3)
+PREPROCESSING COMPLETE!
+================================
+
+SELECT START/END-POINTS
+start: [172, 209]  stop: [629, 110]
+CALCULATING PATH...
+21:47:29
+EXECUTION EXCEDED ADMISIBLE TIME
+==================================================================================
+LOADING DATA:
+PREPROCESSING OF DATA IN PROGRESS...
+original image size main:  (655, 964, 3)
+PREPROCESSING COMPLETE!
+================================
+
+SELECT START/END-POINTS
+start: [438, 85]  stop: [186, 238]
+CALCULATING PATH...
+21:48:05
+EXECUTION EXCEDED ADMISIBLE TIME
+==================================================================================
+LOADING DATA:
+PREPROCESSING OF DATA IN PROGRESS...
+original image size main:  (655, 964, 3)
+PREPROCESSING COMPLETE!
+================================
+
+SELECT START/END-POINTS
+start: [625, 116]  stop: [205, 545]
+CALCULATING PATH...
+21:48:37
+EXECUTION EXCEDED ADMISIBLE TIME
+==================================================================================
+LOADING DATA:
+PREPROCESSING OF DATA IN PROGRESS...
+original image size main:  (655, 964, 3)
+PREPROCESSING COMPLETE!
+================================
+
+SELECT START/END-POINTS
+start: [771, 238]  stop: [205, 538]
+CALCULATING PATH...
+21:49:03
+---------------------------
+GOAL REACHED!!
+limit = 4500 
+     limit_max_step = 600 
+     step1 = 7 
+     step2 = 4 
+     step3 =  3 
+     final_step = 2 
+     error_goal = 
+---> time to compute the path: 16.82752561569214
+==================================================================================
+LOADING DATA:
+PREPROCESSING OF DATA IN PROGRESS...
+original image size main:  (655, 964, 3)
+PREPROCESSING COMPLETE!
+================================
+
+SELECT START/END-POINTS
+start: [761, 190]  stop: [697, 161]
+CALCULATING PATH...
+21:49:48
+EXECUTION EXCEDED ADMISIBLE TIME
+==================================================================================
+LOADING DATA:
+PREPROCESSING OF DATA IN PROGRESS...
+original image size main:  (655, 964, 3)
+PREPROCESSING COMPLETE!
+================================
+
+SELECT START/END-POINTS
+start: [703, 168]  stop: [213, 506]
+CALCULATING PATH...
+21:51:14
+EXECUTION EXCEDED ADMISIBLE TIME
+==================================================================================
+LOADING DATA:
+PREPROCESSING OF DATA IN PROGRESS...
+original image size main:  (655, 964, 3)
+PREPROCESSING COMPLETE!
+================================
+
+SELECT START/END-POINTS
+start: [699, 166]  stop: [364, 258]
+CALCULATING PATH...
+21:52:03
+---------------------------
+GOAL REACHED!!
+limit = 4500 
+     limit_max_step = 600 
+     step1 = 7 
+     step2 = 4 
+     step3 =  3 
+     final_step = 2 
+     error_goal = 
+---> time to compute the path: 17.786086320877075
+==================================================================================
+LOADING DATA:
+PREPROCESSING OF DATA IN PROGRESS...
+original image size main:  (655, 964, 3)
+PREPROCESSING COMPLETE!
+================================
+
+SELECT START/END-POINTS
+start: [718, 172]  stop: [761, 137]
+CALCULATING PATH...
+21:52:37
+---------------------------
+GOAL REACHED!!
+limit = 4500 
+     limit_max_step = 600 
+     step1 = 7 
+     step2 = 4 
+     step3 =  3 
+     final_step = 2 
+     error_goal = 
+---> time to compute the path: 20.731619834899902
+==================================================================================
+LOADING DATA:
+PREPROCESSING OF DATA IN PROGRESS...
+original image size main:  (655, 964, 3)
+PREPROCESSING COMPLETE!
+================================
+
+SELECT START/END-POINTS
+start: [291, 120]  stop: [234, 102]
+CALCULATING PATH...
+21:53:51
+---------------------------
+GOAL REACHED!!
+limit = 4500 
+     limit_max_step = 600 
+     step1 = 7 
+     step2 = 4 
+     step3 =  3 
+     final_step = 2 
+     error_goal = 
+---> time to compute the path: 24.857598304748535
+==================================================================================
+LOADING DATA:
+PREPROCESSING OF DATA IN PROGRESS...
+original image size main:  (655, 964, 3)
+PREPROCESSING COMPLETE!
+================================
+
+SELECT START/END-POINTS
+start: [749, 77]  stop: [845, 391]
+CALCULATING PATH...
+21:54:53
+---------------------------
+GOAL REACHED!!
+limit = 4500 
+     limit_max_step = 700 
+     step1 = 9 
+     step2 = 4 
+     step3 =  3 
+     final_step = 2 
+     error_goal = 
+---> time to compute the path: 21.6273353099823
+==================================================================================
+LOADING DATA:
+PREPROCESSING OF DATA IN PROGRESS...
+original image size main:  (655, 964, 3)
+PREPROCESSING COMPLETE!
+================================
+
+SELECT START/END-POINTS
+start: [773, 271]  stop: [771, 357]
+CALCULATING PATH...
+21:55:49
+---------------------------
+GOAL REACHED!!
+limit = 4500 
+     limit_max_step = 700 
+     step1 = 9 
+     step2 = 4 
+     step3 =  3 
+     final_step = 2 
+     error_goal = 
+---> time to compute the path: 22.932108879089355
+==================================================================================
+LOADING DATA:
+PREPROCESSING OF DATA IN PROGRESS...
+original image size main:  (655, 964, 3)
+PREPROCESSING COMPLETE!
+================================
+
+SELECT START/END-POINTS
+start: [409, 103]  stop: [448, 593]
+CALCULATING PATH...
+21:56:35
+---------------------------
+GOAL REACHED!!
+limit = 3000 
+     limit_max_step = 700 
+     step1 = 9 
+     step2 = 4 
+     step3 =  3 
+     final_step = 2 
+     error_goal = 
+---> time to compute the path: 4.631418943405151
+==================================================================================
+LOADING DATA:
+PREPROCESSING OF DATA IN PROGRESS...
+original image size main:  (655, 964, 3)
+PREPROCESSING COMPLETE!
+================================
+
+SELECT START/END-POINTS
+start: [765, 180]  stop: [213, 479]
+CALCULATING PATH...
+21:56:49
+---------------------------
+GOAL REACHED!!
+limit = 3000 
+     limit_max_step = 700 
+     step1 = 9 
+     step2 = 4 
+     step3 =  3 
+     final_step = 2 
+     error_goal = 
+---> time to compute the path: 14.606733083724976
+==================================================================================
+LOADING DATA:
+PREPROCESSING OF DATA IN PROGRESS...
+original image size main:  (655, 964, 3)
+PREPROCESSING COMPLETE!
+================================
+
+SELECT START/END-POINTS
+start: [211, 522]  stop: [518, 94]
+CALCULATING PATH...
+21:57:11
+---------------------------
+GOAL REACHED!!
+limit = 3000 
+     limit_max_step = 700 
+     step1 = 9 
+     step2 = 4 
+     step3 =  3 
+     final_step = 2 
+     error_goal = 
+---> time to compute the path: 11.58755373954773
+==================================================================================
+LOADING DATA:
+PREPROCESSING OF DATA IN PROGRESS...
+original image size main:  (655, 964, 3)
+PREPROCESSING COMPLETE!
+================================
+
+SELECT START/END-POINTS
+start: [771, 291]  stop: [771, 326]
+CALCULATING PATH...
+21:57:30
+---------------------------
+GOAL REACHED!!
+limit = 3000 
+     limit_max_step = 700 
+     step1 = 9 
+     step2 = 4 
+     step3 =  3 
+     final_step = 2 
+     error_goal = 
+---> time to compute the path: 0.12101364135742188
+==================================================================================
+LOADING DATA:
+PREPROCESSING OF DATA IN PROGRESS...
+original image size main:  (655, 964, 3)
+PREPROCESSING COMPLETE!
+================================
+
+SELECT START/END-POINTS
+start: [738, 15]  stop: [61, 621]
+CALCULATING PATH...
+21:57:39
+LOADING DATA:
+PREPROCESSING OF DATA IN PROGRESS...
+original image size main:  (655, 964, 3)
+PREPROCESSING COMPLETE!
+================================
+
+SELECT START/END-POINTS
+start: [436, 342]  stop: [315, 442]
+CALCULATING PATH...
+21:58:29
+---------------------------
+GOAL REACHED!!
+limit = 3000 
+     limit_max_step = 700 
+     step1 = 9 
+     step2 = 4 
+     step3 =  3 
+     final_step = 2 
+     error_goal = 
+---> time to compute the path: 13.730366230010986
+==================================================================================
+LOADING DATA:
+PREPROCESSING OF DATA IN PROGRESS...
+original image size main:  (655, 964, 3)
+PREPROCESSING COMPLETE!
+================================
+
+SELECT START/END-POINTS
+start: [125, 145]  stop: [55, 623]
+CALCULATING PATH...
+21:58:55
+---------------------------
+GOAL REACHED!!
+limit = 3000 
+     limit_max_step = 700 
+     step1 = 9 
+     step2 = 4 
+     step3 =  3 
+     final_step = 2 
+     error_goal = 
+---> time to compute the path: 17.105873584747314
+==================================================================================
+LOADING DATA:
+PREPROCESSING OF DATA IN PROGRESS...
+original image size main:  (655, 964, 3)
+PREPROCESSING COMPLETE!
+================================
+
+SELECT START/END-POINTS
+start: [448, 83]  stop: [203, 543]
+CALCULATING PATH...
+21:59:20
+---------------------------
+GOAL REACHED!!
+limit = 3000 
+     limit_max_step = 700 
+     step1 = 9 
+     step2 = 4 
+     step3 =  3 
+     final_step = 2 
+     error_goal = 
+---> time to compute the path: 14.434300661087036
+==================================================================================
+LOADING DATA:
+PREPROCESSING OF DATA IN PROGRESS...
+original image size main:  (655, 964, 3)
+PREPROCESSING COMPLETE!
+================================
+
+SELECT START/END-POINTS
+start: [319, 520]  stop: [737, 22]
+CALCULATING PATH...
+21:59:50
