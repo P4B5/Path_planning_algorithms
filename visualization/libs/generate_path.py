@@ -253,39 +253,15 @@ def display_path(input_map, path, p_start, p_stop):
 #   - tree: a graph with all the nodes and conections which reaches the final position
 
 
-# def display_path(point):
-#     relative_path = "..\data\IST_grey_2.PNG"        # Path to data relative to script
-#     dirname = os.path.dirname(__file__)
-#     image_path = os.path.join(dirname, relative_path)
-
-#     # Define original image
-#     orig_image = cv.imread(image_path)
-
-#     # Initialize a subplot to plot everything together
-#     fig1, ax1 = plt.subplots()
-#     # plot the desired map
-#     ax1.imshow(orig_image)
-#     # plot the start/endpoint
-#     ax1.scatter(x=point[0],y=point[1],s=30)
-#     # ax1.scatter(x=p_stop[0], y=p_stop[1], s=80)
-#     # plot the path
-#     # ax1.scatter(*zip(*path), c='r', s=1)
-
-#     plt.show()
-    
-
-
 def get_random_postion(max_x, max_y):
     return (int(random.uniform(0, max_x)), int(random.uniform(0, max_y)))
 
-
-def get_random_position_intelligent(p_stop, d=50):
+def get_random_position_gaussian(p_stop, d=50):
     sample_x = np.random.normal(p_stop[0], d, 1)
     sample_y = np.random.normal(p_stop[1], d, 1)
     
     return (int(sample_x[0]), int(sample_y[0]))
   
-
 def near_neighbour(tree, rand_pos):
     pos = [0,-1]
     for i in tree.keys():
@@ -294,7 +270,6 @@ def near_neighbour(tree, rand_pos):
             pos[0] = i
             pos[1] = h
     return pos[0],pos[1]
-
 
 def select_input(rand_pos, near_pos, step=2):
     next_node = 0
@@ -330,201 +305,161 @@ def select_input(rand_pos, near_pos, step=2):
     return next_node
 
 
+def is_crossing_gree_area(near_pos, next_node, bin_map):
+    crossing = True
 
-def new_state():
+    mid_point = (int((near_pos[0] + next_node[0])/2), int((near_pos[1] + next_node[1])/2))
+    if bin_map[mid_point[1]][mid_point[0]] != 0:
+        crossing = False
 
-
-    return None
-
-
-
-
-def init_tree(graph):
-    tree= {}
-    neighbors = {'NW':0, 'N':0, 'NE':0, 'W':0, 'E':0, 'SW':0, 'S':0, 'SE':0}
-    for i in graph.keys():
-        tree[i] = neighbors
-
-    return tree
-
+    return crossing
 
 def extend_tree(img, gradient_map, tree, rand_pos, step=5):
 
     near_pos, d = near_neighbour(tree, rand_pos) #get near pos
     next_node = select_input(rand_pos, near_pos, step)
-    # gm_shape = gradient_map.shape()
-    print(gradient_map.shape[1])
+ 
+    crossing = is_crossing_gree_area(near_pos, next_node, gradient_map)
     if next_node[1] < gradient_map.shape[0] and next_node[0] < gradient_map.shape[1] and \
-        next_node not in tree.keys() and gradient_map[next_node[1]][next_node[0]] != 0:
-        # tree[near_pos].append(next_node)
+        next_node not in tree.keys() and gradient_map[next_node[1]][next_node[0]] != 0 and crossing is False:
         tree[next_node] = [near_pos,d]
-
-        cv.line(img, near_pos, next_node, (0,0,0), thickness=1, lineType=8)
+        #------------ visualization ---------------------------
+        cv.line(img, near_pos, next_node, (0,0,0), thickness=1, lineType=8) 
         img[next_node[1], next_node[0]]=[0, 255, 0]
+        #------------------------------------------------------
 
     return tree
-    # new_pos = new_state(near_pos, u)
-    # if free_path(near_pos, new_pos):
-    #     tree.add_node
-
-    # return tree_graph
-
 
 
 def get_path_tree(img, tree, p_start,p_stop):
 
-    # pos = list(tree.keys())[-1]
     path = []
     pos, d = near_neighbour(tree, p_stop)
-    fin, d = near_neighbour(tree, p_start)
-    print("pos: ", pos)
-    print(tree)
 
-    # exit(0)
     path.append(p_stop)
     while len(tree[pos]) != 0:
         path.append(tree[pos][0])
         pos = tree[pos][0]
-        print("init pos: ", p_start)
-        # print("pos: ",pos, "parent: ", tree[pos][0])
-    # path.append(pos)
     path.append(p_start)
     
-
     return path
 
 
-def rrt(img, graph, grid, gradient_map, p_start, p_stop):
+def rrt(img, bin_map, p_start, p_stop):
 
-    # grid -> all positions
-    # graph -> postions + pixels orientations
-
-    # start and end points
+   # start and end points
     p_start =  (p_start[0], p_start[1])
     p_stop  =  (p_stop[0], p_stop[1])
     # size of the gradient 
-    max_img_x = gradient_map.shape[1]
-    max_img_y = gradient_map.shape[0]
+    max_img_x = bin_map.shape[1]
+    max_img_y = bin_map.shape[0]
  
-
-
     # visualize init and goal positions
     cv.circle(img, p_start, 5,(0,255,0),thickness=3, lineType=8)
     cv.circle(img, p_stop, 5,(0,0,255),thickness=3, lineType=8)
     
-
     # --- tree inicialization
     tree = {}
     tree[p_start] =  []
     # print(tree)
 
-    
-    K = 0 # number of iterations of the random tree
     ts1 = time.time()    
     goal = False
 
+    # ----- PARAMETERS ------
 
     limit = 3000
     limit_max_step = 700
-    step1 = 9
-    step2 = 4
-    step3 = 3
-    final_step = 2
-    error_goal = 5
+   
+    step = 10
+    error_goal = 8
 
     t = time.localtime()
     current_time = time.strftime("%H:%M:%S", t)
     print(current_time)
 
+
+    tm = []
+    n_nodes = []
+    iter = []
+
+
+    i = 0
     while goal == False:
-        if K < limit:
-            rand_pos = get_random_postion(max_img_x, max_img_y)
-            if K<limit_max_step: 
-                tree= extend_tree(img, gradient_map,tree, rand_pos, step=step1)
-            if K%2 == 0: 
-                tree= extend_tree(img, gradient_map,tree, rand_pos, step=step2)
-            else:
-                tree= extend_tree(img, gradient_map,tree, rand_pos, step=step3)
-        elif K>=limit:
-            rand_pos = get_random_position_intelligent(p_stop)
-            tree = extend_tree(img, gradient_map,tree, rand_pos, step=final_step)
-        
-        # print("distance to goal: ", distance_to_goal)
+  
+        rand_pos = get_random_postion(max_img_x, max_img_y)
+        tree= extend_tree(img, bin_map,tree, rand_pos, step=step)
         k = list(tree.keys())[-1]
         distance_to_goal = math.sqrt((k[0] - p_stop[0])**2 + (k[1] - p_stop[1])**2)
-        # print(distance_to_goal)
 
+        # get time stamp
         ts2 = time.time()
         tf = ts2 - ts1
 
-        if distance_to_goal <= error_goal:
-            break
-
-        # elif tf > 20:
-        #     print("EXECUTION EXCEDED ADMISIBLE TIME")
-        #     print("==================================================================================")
-        #     exit(0)
-            
-       
-
+        # visualization
         # cv.circle(img, rand_pos, 1,(255,0,0),thickness=1, lineType=1)
-        # exit(rand_pos)
-
         cv.imshow("image",img)
         cv.waitKey(1)
-        K += 1
-        # time.sleep(0.01)
-        # cv.circle(img, u, 1,(0,255,0),thickness=1, lineType=8)
+
+        if i%2500 == 0 and step != 1:
+            step-=1
+        if distance_to_goal <= error_goal:
+            goal = True
+
+        print("iterations: ", i, " -- step: ", step, "-- number of nodes: ", len(tree))
+
+        iter.append(i)
+        n_nodes.append(len(tree))
+        tm.append(tf)
+
+        i+=1
+
+    fig, axs = plt.subplots(2)
+    fig.suptitle('BASIC RRT')
+    axs[0].plot(tm, n_nodes)
+    axs[0].set_ylabel("number of nodes")
+    axs[0].set_xlabel("time")
+    axs[1].plot(iter, n_nodes)
+    axs[1].set_ylabel("number of nodes")
+    axs[1].set_xlabel("iterations")
+    
 
 
+    print(len(iter))
+    print(len(n_nodes))
     print("---------------------------")
     print("GOAL REACHED!!")
     print("limit = {} \n \
     limit_max_step = {} \n \
-    step1 = {} \n \
-    step2 = {} \n \
-    step3 =  {} \n \
-    final_step = {} \n \
-    error_goal = ".format(limit,limit_max_step, step1, step2, step3, final_step, error_goal))
+    step =  {} \n \
+    error_goal = ".format(limit,limit_max_step, error_goal))
     print("---> time to compute the path: {}".format(tf))
     print("==================================================================================")
-    
 
-    exit(0)
-
-
-    path = get_path_tree()
-      
+    path = get_path_tree(img, tree, p_start, p_stop)
+    print(path)
     return path
 
 
-
-def rrt_gaussian(img, graph, grid, gradient_map, p_start, p_stop):
-
-    # grid -> all positions
-    # graph -> postions + pixels orientations
+def rrt_gaussian(img, bin_map, p_start, p_stop):
 
     # start and end points
     p_start =  (p_start[0], p_start[1])
     p_stop  =  (p_stop[0], p_stop[1])
     # size of the gradient 
-    max_img_x = gradient_map.shape[1]
-    max_img_y = gradient_map.shape[0]
+    max_img_x = bin_map.shape[1]
+    max_img_y = bin_map.shape[0]
  
-
-
     # visualize init and goal positions
     cv.circle(img, p_start, 5,(0,255,0),thickness=3, lineType=8)
     cv.circle(img, p_stop, 5,(0,0,255),thickness=3, lineType=8)
     
-
     # --- tree inicialization
     tree = {}
     tree[p_start] =  []
     # print(tree)
 
-    
-    K = 0 # number of iterations of the random tree
+   
     ts1 = time.time()    
     goal = False
 
@@ -541,20 +476,26 @@ def rrt_gaussian(img, graph, grid, gradient_map, p_start, p_stop):
     current_time = time.strftime("%H:%M:%S", t)
     print(current_time)
 
+    tm = []
+    n_nodes = []
+    iter = []
+
+    i = 0 # number of iterations of the random tree
     while goal == False:
-        # if K < limit:
-        if K<1000: 
+        # if i < limit:
+        if i<1000: 
             rand_pos = get_random_postion(max_img_x, max_img_y)
-            tree= extend_tree(img, gradient_map,tree, rand_pos, step=step1)
-        if K>=1000 and K<2000: 
-            rand_pos = get_random_position_intelligent(p_stop, d=250)
-            tree= extend_tree(img, gradient_map,tree, rand_pos, step=step2)
-        if K>=2000 and K<3000: 
-            rand_pos = get_random_position_intelligent(p_stop, d=100)
-            tree= extend_tree(img, gradient_map,tree, rand_pos, step=step3)
-        if K>3000: 
-            rand_pos = get_random_position_intelligent(p_stop, d=50)
-            tree= extend_tree(img, gradient_map,tree, rand_pos, step=step3)
+            tree= extend_tree(img, bin_map,tree, rand_pos, step=step1)
+        if i>=1000 and i<2000: 
+            rand_pos = get_random_postion(max_img_x, max_img_y)
+            # rand_pos = get_random_position_gaussian(p_stop, d=250)
+            tree= extend_tree(img, bin_map,tree, rand_pos, step=step2)
+        if i>=2000 and i<3000: 
+            rand_pos = get_random_position_gaussian(p_stop, d=100)
+            tree= extend_tree(img, bin_map,tree, rand_pos, step=step3)
+        if i>3000: 
+            rand_pos = get_random_position_gaussian(p_stop, d=50)
+            tree= extend_tree(img, bin_map,tree, rand_pos, step=step3)
             
         # print("distance to goal: ", distance_to_goal)
         k = list(tree.keys())[-1]
@@ -564,24 +505,30 @@ def rrt_gaussian(img, graph, grid, gradient_map, p_start, p_stop):
         ts2 = time.time()
         tf = ts2 - ts1
 
+        iter.append(i)
+        n_nodes.append(len(tree))
+        tm.append(tf)
+
         if distance_to_goal <= error_goal:
             break
 
-        # elif tf > 20:
-        #     print("EXECUTION EXCEDED ADMISIBLE TIME")
-        #     print("==================================================================================")
-        #     exit(0)
-            
-       
-
-        cv.circle(img, rand_pos, 1,(255,0,0),thickness=1, lineType=1)
+        # cv.circle(img, rand_pos, 1,(255,0,0),thickness=1, lineType=1)
         # exit(rand_pos)
 
         cv.imshow("image",img)
         cv.waitKey(1)
-        K += 1
-        # time.sleep(0.01)
-        # cv.circle(img, u, 1,(0,255,0),thickness=1, lineType=8)
+        i += 1
+
+
+    fig, axs = plt.subplots(2)
+    fig.suptitle('IMPROVED RRT')
+    axs[0].plot(tm, n_nodes)
+    axs[0].set_ylabel("number of nodes")
+    axs[0].set_xlabel("time")
+    axs[1].plot(iter, n_nodes)
+    axs[1].set_ylabel("number of nodes")
+    axs[1].set_xlabel("iterations")
+    
 
 
     print("---------------------------")
@@ -618,55 +565,107 @@ def rrt_gaussian(img, graph, grid, gradient_map, p_start, p_stop):
 
 
 
+# def rrt(img, graph, grid, gradient_map, p_start, p_stop):
+
+#     # grid -> all positions
+#     # graph -> postions + pixels orientations
+
+#     # start and end points
+#     p_start =  (p_start[0], p_start[1])
+#     p_stop  =  (p_stop[0], p_stop[1])
+#     # size of the gradient 
+#     max_img_x = gradient_map.shape[1]
+#     max_img_y = gradient_map.shape[0]
+ 
 
 
-###################################################################
-#
-#
-#                           RTT*
-# 
-#               Rapidly-exploring random trees
-# 
-#       CHARACTERISTICS:
-# 
-# ##################################################################
+#     # visualize init and goal positions
+#     cv.circle(img, p_start, 5,(0,255,0),thickness=3, lineType=8)
+#     cv.circle(img, p_stop, 5,(0,0,255),thickness=3, lineType=8)
+    
 
-# =========================================================
-# RTT  - Rapidly-exploring random tree star
-# Parameters: 
-#   - graph:dict, input graph, consisting of pixel_values and possible neighbors. 
-#   - grid:List, input grid, list of all points in the graph. 
-#   - p_start:tuple, desired starting point of the path.
-#   - p_stop:tuple, desired goal-point of the path. 
-# Returns:
-#   - path:List
+#     # --- tree inicialization
+#     tree = {}
+#     tree[p_start] =  []
+#     # print(tree)
+
+    
+#     K = 0 # number of iterations of the random tree
+#     ts1 = time.time()    
+#     goal = False
 
 
-def rtt_star(graph, grid, gradient_map, p_start, p_stop):
+#     limit = 3000
+#     limit_max_step = 700
+#     step1 = 9
+#     step2 = 4
+#     step3 = 3
+#     final_step = 2
+#     error_goal = 5
+
+#     t = time.localtime()
+#     current_time = time.strftime("%H:%M:%S", t)
+#     print(current_time)
+
+#     while goal == False:
+#         if K < limit:
+#             rand_pos = get_random_postion(max_img_x, max_img_y)
+#             if K<limit_max_step: 
+#                 tree= extend_tree(img, gradient_map,tree, rand_pos, step=step1)
+#             if K%2 == 0: 
+#                 tree= extend_tree(img, gradient_map,tree, rand_pos, step=step2)
+#             else:
+#                 tree= extend_tree(img, gradient_map,tree, rand_pos, step=step3)
+#         elif K>=limit:
+#             rand_pos = get_random_position_gaussian(p_stop)
+#             tree = extend_tree(img, gradient_map,tree, rand_pos, step=final_step)
+        
+#         # print("distance to goal: ", distance_to_goal)
+#         k = list(tree.keys())[-1]
+#         distance_to_goal = math.sqrt((k[0] - p_stop[0])**2 + (k[1] - p_stop[1])**2)
+#         # print(distance_to_goal)
+
+#         ts2 = time.time()
+#         tf = ts2 - ts1
+
+#         if distance_to_goal <= error_goal:
+#             break
+
+#         # elif tf > 20:
+#         #     print("EXECUTION EXCEDED ADMISIBLE TIME")
+#         #     print("==================================================================================")
+#         #     exit(0)
+            
+       
+
+#         # cv.circle(img, rand_pos, 1,(255,0,0),thickness=1, lineType=1)
+#         # exit(rand_pos)
+
+#         cv.imshow("image",img)
+#         cv.waitKey(1)
+#         K += 1
+#         # time.sleep(0.01)
+#         # cv.circle(img, u, 1,(0,255,0),thickness=1, lineType=8)
 
 
+#     print("---------------------------")
+#     print("GOAL REACHED!!")
+#     print("limit = {} \n \
+#     limit_max_step = {} \n \
+#     step1 = {} \n \
+#     step2 = {} \n \
+#     step3 =  {} \n \
+#     final_step = {} \n \
+#     error_goal = ".format(limit,limit_max_step, step1, step2, step3, final_step, error_goal))
+#     print("---> time to compute the path: {}".format(tf))
+#     print("==================================================================================")
+    
 
-    return None
+#     exit(0)
 
 
+#     path = get_path_tree()
+      
+#     return path
 
-###################################################################
-#
-#
-#                       UNINFORMED  RTT*
-# 
-#               Rapidly-exploring random trees
-# 
-#       CHARACTERISTICS:
-# 
-# ##################################################################
 
-# =========================================================
-# RTT  - Rapidly-exploring random tree star
-# Parameters: 
-#   - graph:dict, input graph, consisting of pixel_values and possible neighbors. 
-#   - grid:List, input grid, list of all points in the graph. 
-#   - p_start:tuple, desired starting point of the path.
-#   - p_stop:tuple, desired goal-point of the path. 
-# Returns:
-#   - path:List

@@ -33,7 +33,7 @@ from libs.setup_simulation import *
 # Simulation paramters
 car_velocity = 10                   #max velocity [m/s], 10 m/s is default and path is optimized for that
 use_real_sensors = False            #use real sensor model (false = ideal position data is used to control the car, otherwise GPS etc. is used) -- this function is currently nor working
-energy_contingent = 36       #energy contingent [kJ]
+energy_contingent = 36*(10**3)       #energy contingent [kJ]
 distance_factor = 0.56              #distance in meters for each pixel
 
 
@@ -165,7 +165,8 @@ def get_path():
         print("start:", p_start, " stop:",  p_stop)
         # Try to calculate path
         print("CALCULATING PATH...")
-        path = rrt_gaussian(orig_image, graph, grid,gradient_map, p_start, p_stop)
+        path = rrt(orig_image,bin_image, p_start, p_stop)
+        # path = rrt_gaussian(orig_image,bin_image, p_start, p_stop)
         # exit(0)
 
     #reverse the path points to go from initial to final point
@@ -173,7 +174,7 @@ def get_path():
 
     # Simplify the path 
     print("SIMPLIFYING PATH")
-    path = simplify_path(path, filter_points=3)
+    path = simplify_path(path, filter_points=4)
    
     # --- uncomment to visualize the path ---
     display_path(orig_image, path, p_start, p_stop)
