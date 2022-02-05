@@ -310,19 +310,19 @@ def is_crossing_gree_area(near_pos, next_node, bin_map):
     crossing = True
 
     mid_point = (int((near_pos[0] + next_node[0])/2), int((near_pos[1] + next_node[1])/2))
-    if bin_map[mid_point[1]][mid_point[0]] != 0:
+    if next_node[1] < bin_map.shape[0] and next_node[0] < bin_map.shape[1] and bin_map[mid_point[1]][mid_point[0]] != 0:
         crossing = False
 
     return crossing
 
-def extend_tree(img, gradient_map, tree, rand_pos, step=5):
+def extend_tree(img, bin_map, tree, rand_pos, step=5):
 
     near_pos, d = near_neighbour(tree, rand_pos) #get near pos
     next_node = select_input(rand_pos, near_pos, step)
  
-    crossing = is_crossing_gree_area(near_pos, next_node, gradient_map)
-    if next_node[1] < gradient_map.shape[0] and next_node[0] < gradient_map.shape[1] and \
-        next_node not in tree.keys() and gradient_map[next_node[1]][next_node[0]] != 0 and crossing is False:
+    crossing = is_crossing_gree_area(near_pos, next_node, bin_map)
+    if next_node[1] < bin_map.shape[0] and next_node[0] < bin_map.shape[1] and \
+        next_node not in tree.keys() and bin_map[next_node[1]][next_node[0]] != 0 and crossing is False:
         tree[next_node] = [near_pos,d]
         #------------ visualization ---------------------------
         cv.line(img, near_pos, next_node, (0,0,0), thickness=1, lineType=8) 
@@ -468,7 +468,7 @@ def rrt_gaussian(img, bin_map, p_start, p_stop):
 
     error_goal = 8
     step = 10
-    d = 250
+    sigma = 250
 
     t = time.localtime()
     current_time = time.strftime("%H:%M:%S", t)
@@ -485,8 +485,7 @@ def rrt_gaussian(img, bin_map, p_start, p_stop):
             rand_pos = get_random_postion(max_img_x, max_img_y)
             tree= extend_tree(img, bin_map,tree, rand_pos, step=step)
         if i>=1000: 
-            rand_pos = get_random_postion(max_img_x, max_img_y)
-            rand_pos = get_random_position_gaussian(p_stop, d=d)
+            rand_pos = get_random_position_gaussian(p_stop, d=sigma)
             tree= extend_tree(img, bin_map,tree, rand_pos, step=step)
         # if i>=2000 and i<3000: 
         #     rand_pos = get_random_position_gaussian(p_stop, d=100)
@@ -498,8 +497,8 @@ def rrt_gaussian(img, bin_map, p_start, p_stop):
 
         if i%1000 == 0 and step != 1:
             step-=1
-        if i%500 == 0 and d != 1 and i>=1000:
-            d-=1
+        if i%50 == 0 and sigma != 1 and i>=1000:
+            sigma-=1
             
         # print("distance to goal: ", distance_to_goal)
         k = list(tree.keys())[-1]
@@ -526,11 +525,9 @@ def rrt_gaussian(img, bin_map, p_start, p_stop):
         i += 1
 
 
-    fig, axs = plt.subplots(2)
+    fig, axs = plt.subplots(3)
     fig.suptitle('IMPROVED RRT')
 
-    fig, axs = plt.subplots(2)
-    fig.suptitle('BASIC RRT')
 
     # define a model
     x = np.array(tm).reshape(-1, 1)
@@ -549,6 +546,18 @@ def rrt_gaussian(img, bin_map, p_start, p_stop):
     axs[1].set_ylabel("number of nodes")
     axs[1].set_xlabel("iterations")
     
+
+    x = np.array(tm).reshape(-1, 1)
+    y = np.array(iter)
+    model = LinearRegression().fit(x, y)
+    axs[2].plot(x, model.predict(x), '-r', label='lr')
+    axs[2].scatter(tm,iter , s=0.2)
+    axs[2].set_ylabel("iterations")
+    axs[2].set_xlabel("time")
+    
+
+
+
 
 
     # print(len(iter))
