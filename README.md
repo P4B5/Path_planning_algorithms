@@ -6,7 +6,7 @@ Jonas Brodmann  -  Karlsruhe Institute of Technology
 Valentin Fuchs - Karlsruhe Institute of Technology  
 Pablo Castellanos  - Rey Juan Carlos University
 
-- Paper: Search_algorithms_2022.pdf  
+- Paper: Robotics_Path_Planning_Paper_2022.pdf  
 - Code: /visualization  
 
 ## Abstract
