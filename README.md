@@ -9,7 +9,6 @@ Pablo Castellanos  - Rey Juan Carlos University
 - Paper: Robotics_Path_Planning_Paper_2022.pdf  
 - Code: /visualization  
 
-\* The car simulation on IST campus is based on the repository: https://github.com/winstxnhdw/KinematicBicycleModel
 
 ## Abstract
 This repository is relative to the paper which deals with the comparison of search algorithm for path planning of autonomous movingvehicles.  It aims at giving an overview on different popular search strategies and shows exemplary ina simulation environment the strength and weaknesses of A* and Rapidly-exploring random tree algo-rithms inside the campus of Instituto Superior Tecnico in Lisbon, Portugal.
