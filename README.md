@@ -1,4 +1,4 @@
-# Comparison of search strategies for path planning ofmobile robots
+# Comparison of search strategies for path planning of mobile robots
 
 
 ## Authors
