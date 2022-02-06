@@ -192,4 +192,4 @@ def get_path():
 
 if __name__ == '__main__':
     get_path() #-- get the shortest path from point A to point B
-    main()     #-- main program
+    # main()     #-- main program
