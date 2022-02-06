@@ -18,8 +18,6 @@
 #       Execution:
 #       python3 main.py      
 #                   
-#       simulation visualization based on the open-source repository: 
-#       https://github.com/winstxnhdw/KinematicBicycleModel
 #
 #                                              
 ###############################################################################
