@@ -25,14 +25,14 @@ This repository is relative to the paper which deals with the comparison of sear
 
 ### A*
 
-<img src="https://github.com/P4B5/Path_planning_algorithms/blob/main/docs/plot_Astar_complexity.png" width="300" height="800"/>
+<img src="https://github.com/P4B5/Path_planning_algorithms/blob/main/docs/plot_Astar_complexity.png" width="200" height="700"/>
 
 
 ### RRT
 
-<img src="https://github.com/P4B5/Path_planning_algorithms/blob/main/docs/plot_RRT_basic_complexity.png" width="400" height="400"/>
+<img src="https://github.com/P4B5/Path_planning_algorithms/blob/main/docs/plot_RRT_basic_complexity.png" width="300" height="300"/>
 
 
 ### Improved RRT
 
-<img src="https://github.com/P4B5/Path_planning_algorithms/blob/main/docs/plot_RRT_improved_complexity.png" width="400" height="400"/>
+<img src="https://github.com/P4B5/Path_planning_algorithms/blob/main/docs/plot_RRT_improved_complexity.png" width="300" height="300"/>
