@@ -263,13 +263,20 @@ def get_random_position_gaussian(p_stop, d=50):
     
     return (int(sample_x[0]), int(sample_y[0]))
   
+
+operations = []
+input = []
 def near_neighbour(tree, rand_pos):
     pos = [0,-1]
+    j = 0
     for i in tree.keys():
         h = math.sqrt((rand_pos[0] - i[0])**2 + (rand_pos[1] - i[1])**2 )
         if h <= pos[1] or pos[1] == -1 and pos[1] != 0:
             pos[0] = i
             pos[1] = h
+        j+=1
+    operations.append(j)
+    input.append(len(tree))
     return pos[0],pos[1]
 
 def select_input(rand_pos, near_pos, step=2):
@@ -332,6 +339,9 @@ def extend_tree(img, bin_map, tree, rand_pos, step=5):
     return tree
 
 
+iter_back = []
+input_back = []
+
 def get_path_tree(img, tree, p_start,p_stop):
 
     path = []
@@ -384,6 +394,9 @@ def rrt(img, bin_map, p_start, p_stop):
     n_nodes = []
     iter = []
 
+    h = math.sqrt((p_start[0] - p_stop[0])**2 + (p_start[1] - p_stop[1])**2 )
+    print("distance from init to final pos: ", h)
+
 
     i = 0
     while goal == False:
@@ -398,33 +411,63 @@ def rrt(img, bin_map, p_start, p_stop):
         tf = ts2 - ts1
 
         # visualization
-        # cv.circle(img, rand_pos, 1,(255,0,0),thickness=1, lineType=1)
-        cv.imshow("image",img)
-        cv.waitKey(1)
+        cv.circle(img, rand_pos, 1,(255,0,0),thickness=1, lineType=1)
+        # cv.imshow("image",img)
+        # cv.waitKey(1)
+        
 
         if i%2500 == 0 and step != 1:
             step-=1
         if distance_to_goal <= error_goal:
             goal = True
 
-        print("iterations: ", i, " -- step: ", step, "-- number of nodes: ", len(tree))
+        # print("iterations: ", i, " -- step: ", step, "-- number of nodes: ", len(tree))
 
         iter.append(i)
         n_nodes.append(len(tree))
         tm.append(tf)
-
         i+=1
 
     fig, axs = plt.subplots(2)
-    fig.suptitle('BASIC RRT')
-    axs[0].plot(tm, n_nodes)
-    axs[0].set_ylabel("number of nodes")
-    axs[0].set_xlabel("time")
-    axs[1].plot(iter, n_nodes)
-    axs[1].set_ylabel("number of nodes")
-    axs[1].set_xlabel("iterations")
+    # fig.suptitle('BASIC RRT')
+
     
 
+    # define a model
+    x = np.array(tm).reshape(-1, 1)
+    y = np.array(n_nodes)
+    model = LinearRegression().fit(x, y)
+    # axs[0].set_aspect('equal', adjustable='box')
+    # axs[0].plot(x, model.predict(x), '-r', label='lr')
+    axs[0].scatter(tm, n_nodes, s=0.1)
+    axs[0].set_ylabel("number of nodes")
+    axs[0].set_xlabel("time(s)")
+
+    # x = np.array(iter).reshape(-1, 1)
+    # y = np.array(n_nodes)
+    # model = LinearRegression().fit(x, y)
+    # axs[1].plot(x, model.predict(x), '-r', label='lr')
+    # axs[1].scatter(iter, n_nodes, s=0.1)
+    # axs[1].set_ylabel("number of nodes")
+    # axs[1].set_xlabel("iterations")
+    
+
+    # x = np.array(input).reshape(-1, 1)
+    # y = np.array(operations)
+    # model = LinearRegression().fit(x, y)
+    # # axs[2].plot(x, model.predict(x), '-r', label='lr')
+    # axs[2].scatter(input,operations , s=0.2)
+    # axs[2].set_ylabel("iterations (operations)")
+    # axs[2].set_xlabel("nodes (input)")
+    
+    x = np.array(input).reshape(-1, 1)
+    y = np.array(operations)
+    model = LinearRegression().fit(x, y)
+    # axs[2].plot(x, model.predict(x), '-r', label='lr')
+    axs[1].set_aspect('equal', adjustable='box')
+    axs[1].scatter(input,operations , s=1.0)
+    axs[1].set_ylabel("iterations (operations)")
+    axs[1].set_xlabel("nodes (input)")
 
     print(len(iter))
     print(len(n_nodes))
@@ -468,7 +511,7 @@ def rrt_gaussian(img, bin_map, p_start, p_stop):
 
     error_goal = 8
     step = 10
-    sigma = 250
+    sigma = 500
 
     t = time.localtime()
     current_time = time.strftime("%H:%M:%S", t)
@@ -481,10 +524,10 @@ def rrt_gaussian(img, bin_map, p_start, p_stop):
     i = 0 # number of iterations of the random tree
     while goal == False:
         # if i < limit:
-        if i<1000: 
+        if i<200: 
             rand_pos = get_random_postion(max_img_x, max_img_y)
             tree= extend_tree(img, bin_map,tree, rand_pos, step=step)
-        if i>=1000: 
+        if i>=200: 
             rand_pos = get_random_position_gaussian(p_stop, d=sigma)
             tree= extend_tree(img, bin_map,tree, rand_pos, step=step)
         # if i>=2000 and i<3000: 
@@ -497,8 +540,8 @@ def rrt_gaussian(img, bin_map, p_start, p_stop):
 
         if i%1000 == 0 and step != 1:
             step-=1
-        if i%50 == 0 and sigma != 1 and i>=1000:
-            sigma-=1
+        if i%100 == 0 and sigma != 10 and i>=200:
+            sigma-=10
             
         # print("distance to goal: ", distance_to_goal)
         k = list(tree.keys())[-1]
@@ -511,7 +554,7 @@ def rrt_gaussian(img, bin_map, p_start, p_stop):
         iter.append(i)
         n_nodes.append(len(tree))
         tm.append(tf)
-        print("iterations: ", i, " -- step: ", step, "-- number of nodes: ", len(tree))
+        # print("iterations: ", i, " -- step: ", step, "-- number of nodes: ", len(tree))
 
 
         if distance_to_goal <= error_goal:
@@ -520,41 +563,52 @@ def rrt_gaussian(img, bin_map, p_start, p_stop):
         cv.circle(img, rand_pos, 1,(255,0,0),thickness=1, lineType=1)
         # exit(rand_pos)
 
-        cv.imshow("image",img)
-        cv.waitKey(1)
+        # cv.imshow("image",img)
+        # cv.waitKey(1)
         i += 1
 
 
-    fig, axs = plt.subplots(3)
-    fig.suptitle('IMPROVED RRT')
+    fig, axs = plt.subplots(2)
+    # fig.suptitle('BASIC RRT')
 
+    
 
     # define a model
     x = np.array(tm).reshape(-1, 1)
     y = np.array(n_nodes)
     model = LinearRegression().fit(x, y)
-    axs[0].plot(x, model.predict(x), '-r', label='lr')
+    # axs[0].set_aspect('equal', adjustable='box')
+    # axs[0].plot(x, model.predict(x), '-r', label='lr')
     axs[0].scatter(tm, n_nodes, s=0.1)
     axs[0].set_ylabel("number of nodes")
-    axs[0].set_xlabel("time")
+    axs[0].set_xlabel("time(s)")
 
-    x = np.array(iter).reshape(-1, 1)
-    y = np.array(n_nodes)
-    model = LinearRegression().fit(x, y)
-    axs[1].plot(x, model.predict(x), '-r', label='lr')
-    axs[1].scatter(iter, n_nodes, s=0.1)
-    axs[1].set_ylabel("number of nodes")
-    axs[1].set_xlabel("iterations")
+    # x = np.array(iter).reshape(-1, 1)
+    # y = np.array(n_nodes)
+    # model = LinearRegression().fit(x, y)
+    # axs[1].plot(x, model.predict(x), '-r', label='lr')
+    # axs[1].scatter(iter, n_nodes, s=0.1)
+    # axs[1].set_ylabel("number of nodes")
+    # axs[1].set_xlabel("iterations")
     
 
-    x = np.array(tm).reshape(-1, 1)
-    y = np.array(iter)
-    model = LinearRegression().fit(x, y)
-    axs[2].plot(x, model.predict(x), '-r', label='lr')
-    axs[2].scatter(tm,iter , s=0.2)
-    axs[2].set_ylabel("iterations")
-    axs[2].set_xlabel("time")
+    # x = np.array(input).reshape(-1, 1)
+    # y = np.array(operations)
+    # model = LinearRegression().fit(x, y)
+    # # axs[2].plot(x, model.predict(x), '-r', label='lr')
+    # axs[2].scatter(input,operations , s=0.2)
+    # axs[2].set_ylabel("iterations (operations)")
+    # axs[2].set_xlabel("nodes (input)")
     
+    x = np.array(input).reshape(-1, 1)
+    y = np.array(operations)
+    model = LinearRegression().fit(x, y)
+    # axs[2].plot(x, model.predict(x), '-r', label='lr')
+    axs[1].set_aspect('equal', adjustable='box')
+    axs[1].scatter(input,operations , s=1.0)
+    axs[1].set_ylabel("iterations (operations)")
+    axs[1].set_xlabel("nodes (input)")
+
 
 
 

@@ -165,8 +165,10 @@ def get_path():
         print("start:", p_start, " stop:",  p_stop)
         # Try to calculate path
         print("CALCULATING PATH...")
+        
         # path = rrt(orig_image,bin_image, p_start, p_stop)
         path = rrt_gaussian(orig_image,bin_image, p_start, p_stop)
+        # path = a_star(graph, grid,gradient_map, p_start, p_stop)
         # exit(0)
 
     #reverse the path points to go from initial to final point
