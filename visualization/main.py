@@ -10,8 +10,6 @@
 #                   Valentin Fuchs    -- ist1101370
 #                   Jonas Brodmann    -- ist1101416 
 #                   Pablo Castellanos -- ist1101777
-#                   Maxime Roedele    -- ist1101520
-#                   Aron Berner       -- ist1101793
 #       
 #
 #       Install requeriments:
@@ -77,7 +75,6 @@ def main():
     fl, = ax.plot([], [], color=car.colour)
     rl, = ax.plot([], [], color=car.colour)
     rear_axle, = ax.plot(car.x, car.y, '+', color=car.colour, markersize=2)
-
     plt.grid()
 
   
@@ -166,10 +163,11 @@ def get_path():
         # Try to calculate path
         print("CALCULATING PATH...")
         
-        # path = rrt(orig_image,bin_image, p_start, p_stop)
-        path = rrt_gaussian(orig_image,bin_image, p_start, p_stop)
+        # ------- UNCOMMENT THE FUNCTIONS TO EVALUATE THE SEARCH ALGORITHM YOU WANT------
+        path = rrt(orig_image,bin_image, p_start, p_stop)
+        # path = rrt_gaussian(orig_image,bin_image, p_start, p_stop)
         # path = a_star(graph, grid,gradient_map, p_start, p_stop)
-        # exit(0)
+        # ---------------------------------------------------------------------------
 
     #reverse the path points to go from initial to final point
     path.reverse()
